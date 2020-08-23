@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as core from '@actions/core'
 import {postMessage, PostMessageInputs} from './postMessage'
 
@@ -9,11 +10,14 @@ function asStatus(str: string): 'success' | 'failure' {
 }
 
 function viaEnv(str: string): string {
+  console.log('via', str)
   if (!(str.startsWith('${') && str.endsWith('}'))) {
     return str
   }
   const name = str.substring(2, str.length - 1)
   const value = process.env[name]
+  console.log(process.env)
+  console.log(name, value)
   return value || str
 }
 

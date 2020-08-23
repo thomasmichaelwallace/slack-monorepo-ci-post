@@ -744,6 +744,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-console */
 const core = __importStar(__webpack_require__(186));
 const postMessage_1 = __webpack_require__(965);
 function asStatus(str) {
@@ -753,11 +754,14 @@ function asStatus(str) {
     return str;
 }
 function viaEnv(str) {
+    console.log('via', str);
     if (!(str.startsWith('${') && str.endsWith('}'))) {
         return str;
     }
     const name = str.substring(2, str.length - 1);
     const value = process.env[name];
+    console.log(process.env);
+    console.log(name, value);
     return value || str;
 }
 function run() {
