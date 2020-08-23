@@ -8,21 +8,30 @@ function asStatus(str: string): 'success' | 'failure' {
   return str
 }
 
+function viaEnv(str: string): string {
+  if (!(str.startsWith('${') && str.endsWith('}'))) {
+    return str
+  }
+  const name = str.substring(2, str.length - 1)
+  const value = process.env[name]
+  return value || str
+}
+
 async function run(): Promise<void> {
   try {
     const inputs: PostMessageInputs = {
       status: asStatus(core.getInput('status')),
+      scopes: JSON.parse(core.getInput('scopes')).scopes,
+      version: core.getInput('version'),
+      userIds: JSON.parse(viaEnv(core.getInput('userIds'))),
+      slackToken: viaEnv(core.getInput('slackToken')),
+      conversationId: viaEnv(core.getInput('channelId')),
       repository: core.getInput('repository'),
       stage: core.getInput('stage'),
-      scopes: JSON.parse(core.getInput('scopes')).scopes,
       commits: JSON.parse(core.getInput('commits')),
-      version: core.getInput('version'),
       runUrl: core.getInput('runUrl'),
       sourceUrl: core.getInput('sourceUrl'),
-      username: core.getInput('username'),
-      userIds: JSON.parse(core.getInput('userIds')),
-      slackToken: core.getInput('slackToken'),
-      conversationId: core.getInput('channelId')
+      username: core.getInput('username')
     }
     await postMessage(inputs)
   } catch (error) {

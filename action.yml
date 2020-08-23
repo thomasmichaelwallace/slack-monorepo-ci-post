@@ -16,16 +16,16 @@ inputs:
   # required with defaults set by environment:
   userIds:
     required: true
-    default: ${{ env.SLACK_USER_ID_MAP  }}
+    default: ${SLACK_USER_ID_MAP}
     description: 'json string map of github actor logins to slack user ids, e.g. { "github-cat": "u123456" }'
   conversationId:
     required: true
-    default: ${{ env.SLACK_CONVERSATION_ID }}
+    default: ${SLACK_CONVERSATION_ID}
     description: conversation id to send notification to
   slackToken:
     required: true
     description: slack bot user oauth access token
-    default: ${{ env.SLACK_BOT_TOKEN }}
+    default: ${SLACK_BOT_TOKEN}
   # required with defaults set by context:
   repository:
     required: true
