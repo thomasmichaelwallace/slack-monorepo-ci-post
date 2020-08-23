@@ -2,10 +2,55 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  # required in with:
+  status:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: job status as "success" or "failure"
+  scopes:
+    required: true
+    description: 'built scopes as a json string in the form { "scopes": ["@org/name-1", "@org/name-2"] }'
+  # optional in with:
+  version:
+    required: false
+    description: 'if provided, the version will be reported as built, instead of the commit messages'
+  # required with defaults set by environment:
+  userIds:
+    required: true
+    default: ${{ env.SLACK_USER_ID_MAP  }}
+    description: 'json string map of github actor logins to slack user ids, e.g. { "github-cat": "u123456" }'
+  conversationId:
+    required: true
+    default: ${{ env.SLACK_CONVERSATION_ID }}
+    description: conversation id to send notification to
+  slackToken:
+    required: true
+    description: slack bot user oauth access token
+    default: ${{ env.SLACK_BOT_TOKEN }}
+  # required with defaults set by context:
+  repository:
+    required: true
+    description: repository to report built
+    default: ${{ github.repository }}
+  stage:
+    required: true
+    description: stage/job that has completed
+    default: ${{ github.workflow }}
+  commits:
+    required: true
+    description: 'commit messages as a json string array, e.g. ["message one", "message two"]'
+    default: ${{ toJson(github.event.commits.*.message) }}
+  runUrl:
+    required: true
+    description: url for this current run
+    default: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  sourceUrl:
+    required: true
+    description: url for the source used in this current run
+    default: ${{ github.event.compare }}
+  username:
+    required: true
+    description: username for the user that started this run
+    default: ${{ github.actor }}
 runs:
   using: 'node12'
   main: 'dist/index.js'

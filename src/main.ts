@@ -1,16 +1,30 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {postMessage, PostMessageInputs} from './postMessage'
+
+function asStatus(str: string): 'success' | 'failure' {
+  if (str !== 'success' && str !== 'failure') {
+    throw new TypeError('status must be success or failure')
+  }
+  return str
+}
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const inputs: PostMessageInputs = {
+      status: asStatus(core.getInput('status')),
+      repository: core.getInput('repository'),
+      stage: core.getInput('stage'),
+      scopes: JSON.parse(core.getInput('scopes')).scopes,
+      commits: JSON.parse(core.getInput('commits')),
+      version: core.getInput('version'),
+      runUrl: core.getInput('runUrl'),
+      sourceUrl: core.getInput('sourceUrl'),
+      username: core.getInput('username'),
+      userIds: JSON.parse(core.getInput('userIds')),
+      slackToken: core.getInput('slackToken'),
+      conversationId: core.getInput('channelId')
+    }
+    await postMessage(inputs)
   } catch (error) {
     core.setFailed(error.message)
   }

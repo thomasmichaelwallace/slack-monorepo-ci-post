@@ -1,6 +1,6 @@
 name: 'build-test'
-on: # rebuild any PRs and main branch changes
-  pull_request:
+
+on:
   push:
     branches:
       - main
@@ -20,5 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        env:
+          SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
+          SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          milliseconds: 1000
+          status: 'success'
+          scopes: '{ "scopes": ["@devicepilot/one", "@devicepilot/two"] }'
+

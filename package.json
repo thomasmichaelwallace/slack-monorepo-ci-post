@@ -25,7 +25,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.4"
+    "@actions/core": "^1.2.4",
+    "@slack/web-api": "^5.11.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.10",
