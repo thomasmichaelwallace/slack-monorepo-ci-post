@@ -61,11 +61,13 @@ function buildMessage(inputs: PostMessageInputs): KnownBlock[] {
   }
 
   if (version) {
+    const refs = version.split('/')
+    const versionName = refs[refs.length - 1]
     const release: SectionBlock = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `*release*: https://github.com/${repository}/releases/tag/${version}|${version}>`
+        text: `*release*: <https://github.com/${repository}/releases/tag/${versionName}|${versionName}>`
       }
     }
     blocks.push(release)
