@@ -27,4 +27,13 @@ jobs:
         with:
           status: 'success'
           scopes: '{ "scopes": ["@devicepilot/one", "@devicepilot/two"] }'
+      - uses: ./
+        env:
+          SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
+          SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          status: 'success'
+          scopes: '{ "scopes": ["@devicepilot/one", "@devicepilot/two"] }'
+          version: 'refs/tags/v4.1.3'
 

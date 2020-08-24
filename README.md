@@ -57,3 +57,27 @@ Post CI/CD result from a monorepo (Lerna) built to Slack
     description: username for the user that started this run
     default: ${{ github.actor }}
 ```
+
+### Example usage
+
+```yaml
+jobs:
+  # other jobs
+
+  notify-status:
+    runs-on: ubuntu-latest
+    needs: [final, job, ids]
+    if: always()
+    steps:
+      - name: Get workflow status
+        uses: technote-space/workflow-conclusion-action@v1 # https://github.com/technote-space/workflow-conclusion-action
+      - name: 'Notify'
+        uses: DevicePilot/slack-monorepo-ci-post@v1
+        env:
+          SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
+          SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          scopes: ${{ needs.pre-build.outputs.scopes }}
+```

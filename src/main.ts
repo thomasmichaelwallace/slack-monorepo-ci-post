@@ -17,12 +17,18 @@ function viaEnv(str: string): string {
   return value || str
 }
 
+function getVersion(str: string | undefined): string | undefined {
+  if (!str) return str
+  const refs = str.split('/')
+  return refs[refs.length - 1]
+}
+
 async function run(): Promise<void> {
   try {
     const inputs: PostMessageInputs = {
       status: asStatus(core.getInput('status')),
       scopes: JSON.parse(core.getInput('scopes')).scopes,
-      version: core.getInput('version'),
+      version: getVersion(core.getInput('version')),
       userIds: JSON.parse(viaEnv(core.getInput('userIds'))),
       slackToken: viaEnv(core.getInput('slackToken')),
       conversationId: viaEnv(core.getInput('conversationId')),
