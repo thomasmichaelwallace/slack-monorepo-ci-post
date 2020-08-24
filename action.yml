@@ -1,6 +1,9 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Slack Monorepo CI/CD Post'
+description: 'Post CI/CD result from a monorepo (Lerna) built to Slack'
+author: 'thomasmichaelwallace <tom.wallace@devicepilot.com>'
+branding:
+  icon: message-square
+  color: blue
 inputs:
   # required in with:
   status:

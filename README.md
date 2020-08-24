@@ -1,33 +1,59 @@
 # slack-monorepo-ci-post
 
-## Publish to a distribution branch
+Slack Monorepo CI/CD Post
 
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
+Post CI/CD result from a monorepo (Lerna) built to Slack
 
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+## Inputs
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+  # required in with:
+  status:
+    required: true
+    description: job status as "success" or "failure"
+  scopes:
+    required: true
+    description: 'built scopes as a json string in the form { "scopes": ["@org/name-1", "@org/name-2"] }'
+  # optional in with:
+  version:
+    required: false
+    description: 'if provided, the version will be reported as built, instead of the commit messages'
+  # required with defaults set by environment:
+  userIds:
+    required: true
+    default: ${SLACK_USER_ID_MAP}
+    description: 'json string map of github actor logins to slack user ids, e.g. { "github-cat": "u123456" }'
+  conversationId:
+    required: true
+    default: ${SLACK_CONVERSATION_ID}
+    description: conversation id to send notification to
+  slackToken:
+    required: true
+    description: slack bot user oauth access token
+    default: ${SLACK_BOT_TOKEN}
+  # required with defaults set by context:
+  repository:
+    required: true
+    description: repository to report built
+    default: ${{ github.repository }}
+  stage:
+    required: true
+    description: stage/job that has completed
+    default: ${{ github.workflow }}
+  commits:
+    required: true
+    description: 'commit messages as a json string array, e.g. ["message one", "message two"]'
+    default: ${{ toJson(github.event.commits.*.message) }}
+  runUrl:
+    required: true
+    description: url for this current run
+    default: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  sourceUrl:
+    required: true
+    description: url for the source used in this current run
+    default: ${{ github.event.compare }}
+  username:
+    required: true
+    description: username for the user that started this run
+    default: ${{ github.actor }}
 ```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
