@@ -765,7 +765,7 @@ function run() {
         try {
             const inputs = {
                 status: asStatus(core.getInput('status')),
-                scopes: JSON.parse(core.getInput('scopes')).scopes,
+                scopes: JSON.parse(core.getInput('scopes')).scope,
                 version: core.getInput('version'),
                 userIds: JSON.parse(viaEnv(core.getInput('userIds'))),
                 slackToken: viaEnv(core.getInput('slackToken')),
@@ -7531,11 +7531,13 @@ function buildMessage(inputs) {
         blocks.push(packages);
     }
     if (version) {
+        const refs = version.split('/');
+        const versionName = refs[refs.length - 1];
         const release = {
             type: 'section',
             text: {
                 type: 'mrkdwn',
-                text: `*release*: https://github.com/${repository}/releases/tag/${version}|${version}>`
+                text: `*release*: <https://github.com/${repository}/releases/tag/${versionName}|${versionName}>`
             }
         };
         blocks.push(release);
