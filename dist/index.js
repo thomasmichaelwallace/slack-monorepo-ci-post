@@ -7564,7 +7564,6 @@ function buildMessage(inputs) {
         elements: [{ type: 'mrkdwn', text: userLink }]
     };
     blocks.push(mention);
-    // TODO: handle url 200 response
     const actions = {
         type: 'actions',
         elements: [
@@ -7574,7 +7573,7 @@ function buildMessage(inputs) {
                     type: 'plain_text',
                     text: 'Build Log'
                 },
-                style: 'primary',
+                style: status === 'success' ? 'primary' : 'danger',
                 url: runUrl
             },
             {
@@ -7583,7 +7582,6 @@ function buildMessage(inputs) {
                     type: 'plain_text',
                     text: 'Source'
                 },
-                style: 'primary',
                 url: sourceUrl
             }
         ]

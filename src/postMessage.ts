@@ -98,7 +98,6 @@ function buildMessage(inputs: PostMessageInputs): KnownBlock[] {
   }
   blocks.push(mention)
 
-  // TODO: handle url 200 response
   const actions: ActionsBlock = {
     type: 'actions',
     elements: [
@@ -108,7 +107,7 @@ function buildMessage(inputs: PostMessageInputs): KnownBlock[] {
           type: 'plain_text',
           text: 'Build Log'
         },
-        style: 'primary',
+        style: status === 'success' ? 'primary' : 'danger',
         url: runUrl
       },
       {
@@ -117,7 +116,6 @@ function buildMessage(inputs: PostMessageInputs): KnownBlock[] {
           type: 'plain_text',
           text: 'Source'
         },
-        style: 'primary',
         url: sourceUrl
       }
     ]

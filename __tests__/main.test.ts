@@ -1,16 +1,12 @@
-// import {wait} from '../src/wait'
-// import * as process from 'process'
-// import * as cp from 'child_process'
-// import * as path from 'path'
+// import { WebClient } from '@slack/web-api';
 
-// shows how the runner will run a javascript action with env / stdout protocol
-// test('test runs', () => {
-//   process.env['INPUT_MILLISECONDS'] = '500'
-//   const ip = path.join(__dirname, '..', 'lib', 'main.js')
-//   const options: cp.ExecSyncOptions = {
-//     env: process.env
-//   }
-//   console.log(cp.execSync(`node ${ip}`, options).toString())
+// jest.mock('@slack/web-api');
+
+// const m = <T extends (...args: any) => any>(
+//   f: T) => f as unknown as jest.MockInstance<ReturnType<T>, Parameters<T>>;
+
+// test('builds and posts as slack message', async () => {
+
 // })
 
 test('to be written', () => {
