@@ -13,7 +13,7 @@ Post CI/CD result from a monorepo (Lerna) built to Slack
     description: job status as "success" or "failure"
   scopes:
     required: true
-    description: 'built scopes as a json string in the form { "scopes": ["@org/name-1", "@org/name-2"] }'
+    description: 'built scopes as a json string in the form { "scope": ["@org/name-1", "@org/name-2"] }'
   # optional in with:
   version:
     required: false

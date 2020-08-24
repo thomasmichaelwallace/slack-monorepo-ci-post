@@ -21,7 +21,7 @@ async function run(): Promise<void> {
   try {
     const inputs: PostMessageInputs = {
       status: asStatus(core.getInput('status')),
-      scopes: JSON.parse(core.getInput('scopes')).scopes,
+      scopes: JSON.parse(core.getInput('scopes')).scope,
       version: core.getInput('version'),
       userIds: JSON.parse(viaEnv(core.getInput('userIds'))),
       slackToken: viaEnv(core.getInput('slackToken')),
