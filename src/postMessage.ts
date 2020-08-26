@@ -3,6 +3,7 @@ import {
   ActionsBlock,
   ContextBlock,
   KnownBlock,
+  MrkdwnElement,
   SectionBlock,
   WebClient
 } from '@slack/web-api'
@@ -49,15 +50,18 @@ function buildMessage(inputs: PostMessageInputs): KnownBlock[] {
   blocks.push(header)
 
   if (scopes.length) {
-    const packages: SectionBlock = {
-      type: 'section',
-      fields: scopes.map(p => {
-        const [org, name] = p.split('/')
-        const text = `_${org}_/*${name}*`
-        return {type: 'mrkdwn', text}
-      })
+    const allFields: MrkdwnElement[] = scopes.map(p => {
+      const [org, name] = p.split('/')
+      const text = `_${org}_/*${name}*`
+      return {type: 'mrkdwn', text}
+    })
+    while (allFields.length) {
+      // no more than 10 items allowed are allowed in /blocks/fields
+      // so just keep appending sections...
+      const fields = allFields.splice(0, 10)
+      const packages: SectionBlock = {type: 'section', fields}
+      blocks.push(packages)
     }
-    blocks.push(packages)
   }
 
   if (version) {

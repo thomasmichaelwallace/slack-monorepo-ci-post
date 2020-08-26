@@ -7520,15 +7520,18 @@ function buildMessage(inputs) {
     };
     blocks.push(header);
     if (scopes.length) {
-        const packages = {
-            type: 'section',
-            fields: scopes.map(p => {
-                const [org, name] = p.split('/');
-                const text = `_${org}_/*${name}*`;
-                return { type: 'mrkdwn', text };
-            })
-        };
-        blocks.push(packages);
+        const allFields = scopes.map(p => {
+            const [org, name] = p.split('/');
+            const text = `_${org}_/*${name}*`;
+            return { type: 'mrkdwn', text };
+        });
+        while (allFields.length) {
+            // no more than 10 items allowed are allowed in /blocks/fields
+            // so just keep appending sections...
+            const fields = allFields.splice(0, 10);
+            const packages = { type: 'section', fields };
+            blocks.push(packages);
+        }
     }
     if (version) {
         const refs = version.split('/');

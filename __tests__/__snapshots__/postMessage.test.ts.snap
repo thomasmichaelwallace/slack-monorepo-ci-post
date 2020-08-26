@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`posts a simple message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "blocks": Array [
+          Object {
+            "text": Object {
+              "text": "*org/project* _development_ has completed :white_check_mark:",
+              "type": "mrkdwn",
+            },
+            "type": "section",
+          },
+          Object {
+            "fields": Array [
+              Object {
+                "text": "_@org_/*project-0*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-1*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-2*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-3*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-4*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-5*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-6*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-7*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-8*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-9*",
+                "type": "mrkdwn",
+              },
+            ],
+            "type": "section",
+          },
+          Object {
+            "fields": Array [
+              Object {
+                "text": "_@org_/*project-10*",
+                "type": "mrkdwn",
+              },
+              Object {
+                "text": "_@org_/*project-11*",
+                "type": "mrkdwn",
+              },
+            ],
+            "type": "section",
+          },
+          Object {
+            "text": Object {
+              "text": "*fix*: works perfectly, fixes <https://github.com/org/project/issues/123|#123>",
+              "type": "mrkdwn",
+            },
+            "type": "section",
+          },
+          Object {
+            "elements": Array [
+              Object {
+                "text": "<@slack_user_two>",
+                "type": "mrkdwn",
+              },
+            ],
+            "type": "context",
+          },
+          Object {
+            "elements": Array [
+              Object {
+                "style": "primary",
+                "text": Object {
+                  "text": "Build Log",
+                  "type": "plain_text",
+                },
+                "type": "button",
+                "url": "example.com/actions/this_run",
+              },
+              Object {
+                "text": Object {
+                  "text": "Source",
+                  "type": "plain_text",
+                },
+                "type": "button",
+                "url": "example.com/sources/this_push",
+              },
+            ],
+            "type": "actions",
+          },
+        ],
+        "channel": "conversation_id",
+        "text": "org/project development: success",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Promise {},
+    },
+  ],
+}
+`;
