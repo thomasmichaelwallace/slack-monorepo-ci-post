@@ -9,7 +9,7 @@ import {
 } from '@slack/web-api'
 
 export type PostMessageInputs = {
-  status: 'success' | 'failure'
+  status: 'neutral' | 'success' | 'cancelled' | 'timed_out' | 'failure'
   scopes: string[] // extracted from { scopes: [] }
   version: string | undefined
   userIds: Record<string, string> // parsed from json string

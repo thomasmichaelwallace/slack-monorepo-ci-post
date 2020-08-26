@@ -747,7 +747,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
 const postMessage_1 = __webpack_require__(965);
 function asStatus(str) {
-    if (str !== 'success' && str !== 'failure') {
+    const statuses = [
+        'neutral',
+        'success',
+        'cancelled',
+        'timed_out',
+        'failure'
+    ];
+    if (!statuses.includes(str)) {
         throw new TypeError('status must be success or failure');
     }
     return str;

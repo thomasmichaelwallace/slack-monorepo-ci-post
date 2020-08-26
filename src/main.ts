@@ -1,11 +1,18 @@
 import * as core from '@actions/core'
 import {postMessage, PostMessageInputs} from './postMessage'
 
-function asStatus(str: string): 'success' | 'failure' {
-  if (str !== 'success' && str !== 'failure') {
+function asStatus(str: string): PostMessageInputs['status'] {
+  const statuses: PostMessageInputs['status'][] = [
+    'neutral',
+    'success',
+    'cancelled',
+    'timed_out',
+    'failure'
+  ]
+  if (!statuses.includes(str as PostMessageInputs['status'])) {
     throw new TypeError('status must be success or failure')
   }
-  return str
+  return str as PostMessageInputs['status']
 }
 
 function viaEnv(str: string): string {
