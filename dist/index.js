@@ -3220,8 +3220,8 @@ class WebClient extends methods_1.Methods {
     /**
      * Generic method for calling a Web API method
      *
-     * @param method the Web API method to call {@see https://api.slack.com/methods}
-     * @param options options
+     * @param method - the Web API method to call {@link https://api.slack.com/methods}
+     * @param options - options
      */
     async apiCall(method, options) {
         this.logger.debug(`apiCall('${method}') start`);
@@ -3393,8 +3393,8 @@ class WebClient extends methods_1.Methods {
      * when the options contain a binary (a stream or a buffer) and the upload should be done with content-type
      * multipart/form-data.
      *
-     * @param options arguments for the Web API method
-     * @param headers a mutable object representing the HTTP headers for the outgoing request
+     * @param options - arguments for the Web API method
+     * @param headers - a mutable object representing the HTTP headers for the outgoing request
      */
     serializeApiCallOptions(options, headers) {
         // The following operation both flattens complex objects into a JSON-encoded strings and searches the values for
@@ -5124,6 +5124,11 @@ class Methods extends eventemitter3_1.EventEmitter {
                 set: bindApiCall(this, 'users.profile.set'),
             },
         };
+        this.workflows = {
+            stepCompleted: bindApiCall(this, 'workflows.stepCompleted'),
+            stepFailed: bindApiCall(this, 'workflows.stepFailed'),
+            updateStep: bindApiCall(this, 'workflows.updateStep'),
+        };
         // Check that the class being created extends from `WebClient` rather than this class
         if (new.target !== WebClient_1.WebClient && !(new.target.prototype instanceof WebClient_1.WebClient)) {
             throw new Error('Attempt to inherit from WebClient methods without inheriting from WebClient');
@@ -6392,8 +6397,8 @@ const baseUserAgent = `${replaceSlashes(packageJson.name)}/${packageJson.version
 const appMetadata = {};
 /**
  * Appends the app metadata into the User-Agent value
- * @param appMetadata.name name of tool to be counted in instrumentation
- * @param appMetadata.version version of tool to be counted in instrumentation
+ * @param appMetadata.name - name of tool to be counted in instrumentation
+ * @param appMetadata.version - version of tool to be counted in instrumentation
  */
 function addAppMetadata({ name, version }) {
     appMetadata[replaceSlashes(name)] = version;
@@ -7478,7 +7483,7 @@ function terminator(callback)
 /***/ 945:
 /***/ (function(module) {
 
-module.exports = {"_from":"@slack/web-api@5.11.0","_id":"@slack/web-api@5.11.0","_inBundle":false,"_integrity":"sha512-4a/uj7IZjFLu7Qmq0nH74ecLqk1iI/9x3yRS/v6M5vXDyc5lEruRFp4d5/bz4eN5Bathlq4Bws0wioY516fPag==","_location":"/@slack/web-api","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@slack/web-api@5.11.0","name":"@slack/web-api","escapedName":"@slack%2fweb-api","scope":"@slack","rawSpec":"5.11.0","saveSpec":null,"fetchSpec":"5.11.0"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/@slack/web-api/-/web-api-5.11.0.tgz","_shasum":"6549ec71d13c2837cc672cbf7793a88eef22802f","_spec":"@slack/web-api@5.11.0","_where":"/home/ubuntu/persist/code/slack-monorepo-ci-post","author":{"name":"Slack Technologies, Inc."},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"bundleDependencies":false,"dependencies":{"@slack/logger":">=1.0.0 <3.0.0","@slack/types":"^1.7.0","@types/is-stream":"^1.1.0","@types/node":">=8.9.0","@types/p-queue":"^2.3.2","axios":"^0.19.0","eventemitter3":"^3.1.0","form-data":"^2.5.0","is-stream":"^1.1.0","p-queue":"^2.4.2","p-retry":"^4.0.0"},"deprecated":false,"description":"Official library for using the Slack Platform's Web API","devDependencies":{"@aoberoi/capture-console":"^1.1.0","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","busboy":"^0.3.0","chai":"^4.2.0","codecov":"^3.2.0","mocha":"^6.0.2","nock":"^10.0.6","nyc":"^14.1.1","shelljs":"^0.8.3","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^8.0.3","tslint":"^5.13.1","tslint-config-airbnb":"^5.11.1","typescript":"^3.3.3333"},"engines":{"node":">= 8.9.0","npm":">= 5.5.1"},"files":["dist/**/*"],"homepage":"https://slack.dev/node-slack-sdk/web-api","keywords":["slack","web-api","bot","client","http","api","proxy","rate-limiting","pagination"],"license":"MIT","main":"dist/index.js","name":"@slack/web-api","publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/slackapi/node-slack-sdk.git"},"scripts":{"build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","coverage":"codecov -F webapi --root=$PWD","lint":"tslint --project .","prepare":"npm run build","test":"npm run build && nyc mocha --config .mocharc.json src/*.spec.js"},"types":"./dist/index.d.ts","version":"5.11.0"};
+module.exports = {"_from":"@slack/web-api@^5.12.0","_id":"@slack/web-api@5.12.0","_inBundle":false,"_integrity":"sha512-ygSnNHVid7PltGo7W36f2SNVHyliemkzxn9uSwgnWNF7CHmWBKWAylU/eoDml9l5K7akMOxbousiurOw4XqOFg==","_location":"/@slack/web-api","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"@slack/web-api@^5.12.0","name":"@slack/web-api","escapedName":"@slack%2fweb-api","scope":"@slack","rawSpec":"^5.12.0","saveSpec":null,"fetchSpec":"^5.12.0"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/@slack/web-api/-/web-api-5.12.0.tgz","_shasum":"1de5e660f20fa64091bcc73eb41e3c1d3ae8e13c","_spec":"@slack/web-api@^5.12.0","_where":"/home/ubuntu/persist/code/slack-monorepo-ci-post","author":{"name":"Slack Technologies, Inc."},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"bundleDependencies":false,"dependencies":{"@slack/logger":">=1.0.0 <3.0.0","@slack/types":"^1.7.0","@types/is-stream":"^1.1.0","@types/node":">=8.9.0","@types/p-queue":"^2.3.2","axios":"^0.19.0","eventemitter3":"^3.1.0","form-data":"^2.5.0","is-stream":"^1.1.0","p-queue":"^2.4.2","p-retry":"^4.0.0"},"deprecated":false,"description":"Official library for using the Slack Platform's Web API","devDependencies":{"@aoberoi/capture-console":"^1.1.0","@microsoft/api-extractor":"^7.3.4","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","busboy":"^0.3.0","chai":"^4.2.0","codecov":"^3.2.0","mocha":"^6.0.2","nock":"^10.0.6","nyc":"^14.1.1","shelljs":"^0.8.3","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^8.0.3","tsd":"^0.13.1","tslint":"^5.13.1","tslint-config-airbnb":"^5.11.1","typescript":"^3.3.3333"},"engines":{"node":">= 8.9.0","npm":">= 5.5.1"},"files":["dist/**/*"],"homepage":"https://slack.dev/node-slack-sdk/web-api","keywords":["slack","web-api","bot","client","http","api","proxy","rate-limiting","pagination"],"license":"MIT","main":"dist/index.js","name":"@slack/web-api","publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/slackapi/node-slack-sdk.git"},"scripts":{"build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","coverage":"codecov -F webapi --root=$PWD","lint":"tslint --project .","prepare":"npm run build","ref-docs:model":"api-extractor run","test":"npm run build && npm run test:mocha && npm run test:types","test:mocha":"nyc mocha --config .mocharc.json src/*.spec.js","test:types":"tsd","watch":"npx nodemon --watch 'src' --ext 'ts' --exec npm run build"},"tsd":{"directory":"test/types"},"types":"./dist/index.d.ts","version":"5.12.0"};
 
 /***/ }),
 
