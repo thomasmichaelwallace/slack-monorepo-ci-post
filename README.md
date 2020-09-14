@@ -2,7 +2,7 @@
 
 Slack Monorepo CI/CD Post
 
-Post CI/CD result from a monorepo (Lerna) built to Slack
+Post CI/CD results from a monorepo (Lerna) build to Slack
 
 ## Inputs
 
