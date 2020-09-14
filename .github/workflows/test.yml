@@ -4,7 +4,11 @@ on:
   push:
     branches:
         - main
-    # tags: ['*']
+
+env:
+  SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
+  SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
 jobs:
   build: # make sure build/ci work properly
@@ -15,15 +19,16 @@ jobs:
           npm install
       - run: |
           npm run all
+      - uses: ./
+        with:
+          status: 'success'
+          scopes: '{ "scope": ["@devicepilot/one", "@devicepilot/two"] }'
+          version: 'refs/tags/v4.1.3'
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        env:
-          SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
-          SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
           status: 'success'
           scopes: '{ "scope": ["@devicepilot/one", "@devicepilot/two"] }'
