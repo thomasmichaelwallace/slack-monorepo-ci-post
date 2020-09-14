@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/actions/typescript-action/compare/v1.2.2...v1.2.3) (2020-09-14)
+
+
+### Bug Fixes
+
+* bump unsuspected slack/github apis ([56ac7fb](https://github.com/actions/typescript-action/commit/56ac7fb2199491b0225627b7050eaac00f6116ae))
+* roll back broken dependents ([bc7f7ca](https://github.com/actions/typescript-action/commit/bc7f7ca8f8cf9a5e14fc7060f16d39692fe6cf10))
+
 ### [1.2.2](https://github.com/actions/typescript-action/compare/v1.2.1...v1.2.2) (2020-09-14)
 
 
