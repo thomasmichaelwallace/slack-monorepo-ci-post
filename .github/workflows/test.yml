@@ -2,9 +2,7 @@ name: 'build-test'
 
 on:
   push:
-    branches:
-      - main
-      - 'releases/*'
+    tags: ['*']
 
 jobs:
   build: # make sure build/ci work properly
@@ -19,14 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
-        env:
-          SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
-          SLACK_CONVERSATION_ID: ${{ secrets.SLACK_CONVERSATION_ID }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        with:
-          status: 'success'
-          scopes: '{ "scope": ["@devicepilot/one", "@devicepilot/two"] }'
       - uses: ./
         env:
           SLACK_USER_ID_MAP: ${{ secrets.SLACK_USER_ID_MAP }}
