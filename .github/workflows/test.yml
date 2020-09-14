@@ -2,7 +2,9 @@ name: 'build-test'
 
 on:
   push:
-    tags: ['*']
+    branches:
+        - main
+    # tags: ['*']
 
 jobs:
   build: # make sure build/ci work properly
