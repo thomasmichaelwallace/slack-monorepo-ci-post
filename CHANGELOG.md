@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/actions/typescript-action/compare/v1.2.5...v1.2.6) (2021-03-30)
+
+
+### Bug Fixes
+
+* bump dependencies ([c440167](https://github.com/actions/typescript-action/commit/c440167ff4797bcd3245398ed50b03b445d9c907))
+
 ### [1.2.5](https://github.com/actions/typescript-action/compare/v1.2.4...v1.2.5) (2020-10-20)
 
 ### [1.2.4](https://github.com/actions/typescript-action/compare/v1.2.3...v1.2.4) (2020-10-09)
