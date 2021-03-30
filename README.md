@@ -95,7 +95,3 @@ To package (maintainers only):
  * `npm run release`
  * `git push --follow-tags origin main`
  * Create a new release: https://github.com/DevicePilot/slack-monorepo-ci-post/releases/new
-
-## Known issues
- * @varcel/ncc is pinned [because of a bug packaging slack](https://github.com/vercel/ncc/issues/590). Use `ncu -x @vercel/ncc -u` when checking for upgrades.
- 
