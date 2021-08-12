@@ -1,4 +1,4 @@
-import {postMessage, PostMessageInputs} from '../src/postMessage'
+import {postMessage, PostMessageInputs} from '../src/post-message'
 
 const mockPostMessage = jest.fn().mockResolvedValue({})
 jest.mock('@slack/web-api', () => ({

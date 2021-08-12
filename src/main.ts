@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {postMessage, PostMessageInputs} from './postMessage'
+import {PostMessageInputs, postMessage} from './post-message'
 
 function asStatus(str: string): PostMessageInputs['status'] {
   const statuses: PostMessageInputs['status'][] = [
