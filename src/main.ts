@@ -42,7 +42,11 @@ async function run(): Promise<void> {
     }
     await postMessage(inputs)
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    } else {
+      core.setFailed('an unknown error occurred')
+    }
   }
 }
 
