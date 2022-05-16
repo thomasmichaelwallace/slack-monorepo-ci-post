@@ -28,7 +28,7 @@
   "dependencies": {
     "@actions/core": "^1.8.2",
     "@slack/web-api": "^6.7.1",
-    "standard-version": "^9.3.2"
+    "standard-version": "^9.5.0"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
