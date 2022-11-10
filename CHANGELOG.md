@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/actions/typescript-action/compare/v1.2.7...v2.0.0) (2022-11-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* requrie node 16 runner
+
+### Features
+
+* use node 16 ([9620bf8](https://github.com/actions/typescript-action/commit/9620bf84c27420aa1600f17ebd16a2bfde8b33b9))
+
+
+### Bug Fixes
+
+* conflicting jest dependencies ([b0a95e8](https://github.com/actions/typescript-action/commit/b0a95e84e52f0bf3ca1271e52c3c4b6db1d33d0b))
+* stabilise dependencies ([b32fa44](https://github.com/actions/typescript-action/commit/b32fa44bbb83cb35bba3e93cd68cf1df7d5a918a))
+* support untyped errors being caught ([7133373](https://github.com/actions/typescript-action/commit/7133373d1071e8c25be594d231d69954194e4fcc))
+
 ### [1.2.8](https://github.com/actions/typescript-action/compare/v1.2.7...v1.2.8) (2022-04-26)
 
 
