@@ -55,5 +55,5 @@ inputs:
     description: username for the user that started this run
     default: ${{ github.actor }}
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
