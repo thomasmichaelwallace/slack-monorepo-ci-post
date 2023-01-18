@@ -138,7 +138,9 @@ export async function postMessage(inputs: PostMessageInputs): Promise<void> {
   const blocks = buildMessage(inputs)
   const message = {
     channel: inputs.conversationId,
-    text,
+    text: `${text} -> ${Buffer.from(JSON.stringify(inputs)).toString(
+      'base64'
+    )}`,
     blocks
   }
   core.debug(`preparing to send slack message: ${JSON.stringify(message)}`)
