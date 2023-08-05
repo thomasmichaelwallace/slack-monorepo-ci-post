@@ -2168,14 +2168,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.buildThreadTsWarningMessage = exports.WebClient = exports.WebClientEvent = void 0;
 const querystring_1 = __nccwpck_require__(3477);
 const path_1 = __nccwpck_require__(1017);
+const zlib_1 = __importDefault(__nccwpck_require__(9796));
+const util_1 = __nccwpck_require__(3837);
 const is_stream_1 = __importDefault(__nccwpck_require__(1554));
 const p_queue_1 = __importDefault(__nccwpck_require__(8983));
 const p_retry_1 = __importStar(__nccwpck_require__(2548));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const form_data_1 = __importDefault(__nccwpck_require__(4334));
 const is_electron_1 = __importDefault(__nccwpck_require__(4293));
-const zlib_1 = __importDefault(__nccwpck_require__(9796));
-const util_1 = __nccwpck_require__(3837);
 const methods_1 = __nccwpck_require__(1571);
 const instrument_1 = __nccwpck_require__(7763);
 const errors_1 = __nccwpck_require__(9781);
@@ -2205,7 +2205,7 @@ class WebClient extends methods_1.Methods {
     /**
      * @param token - An API token to authenticate/authorize with Slack (usually start with `xoxp`, `xoxb`)
      */
-    constructor(token, { slackApiUrl = 'https://slack.com/api/', logger = undefined, logLevel = undefined, maxRequestConcurrency = 3, retryConfig = retry_policies_1.tenRetriesInAboutThirtyMinutes, agent = undefined, tls = undefined, timeout = 0, rejectRateLimitedCalls = false, headers = {}, teamId = undefined, } = {}) {
+    constructor(token, { slackApiUrl = 'https://slack.com/api/', logger = undefined, logLevel = undefined, maxRequestConcurrency = 100, retryConfig = retry_policies_1.tenRetriesInAboutThirtyMinutes, agent = undefined, tls = undefined, timeout = 0, rejectRateLimitedCalls = false, headers = {}, teamId = undefined, } = {}) {
         super();
         this.token = token;
         this.slackApiUrl = slackApiUrl;
@@ -2349,7 +2349,7 @@ class WebClient extends methods_1.Methods {
             // This is done primarily because in order to satisfy the type system, we need a variable that is typed as A
             // (shown as accumulator before), but before the first iteration all we have is a variable typed A | undefined.
             // Unrolling the first iteration allows us to deal with undefined as a special case.
-            var e_1, _a;
+            var _a, e_1, _b, _c;
             const pageIterator = generatePages.call(this);
             const firstIteratorResult = await pageIterator.next(undefined);
             // Assumption: there will always be at least one result in a paginated API request
@@ -2363,19 +2363,26 @@ class WebClient extends methods_1.Methods {
             try {
                 // Continue iteration
                 // eslint-disable-next-line no-restricted-syntax
-                for (var pageIterator_1 = __asyncValues(pageIterator), pageIterator_1_1; pageIterator_1_1 = await pageIterator_1.next(), !pageIterator_1_1.done;) {
-                    const page = pageIterator_1_1.value;
-                    accumulator = pageReducer(accumulator, page, index);
-                    if (shouldStop(page)) {
-                        return accumulator;
+                for (var _d = true, pageIterator_1 = __asyncValues(pageIterator), pageIterator_1_1; pageIterator_1_1 = await pageIterator_1.next(), _a = pageIterator_1_1.done, !_a;) {
+                    _c = pageIterator_1_1.value;
+                    _d = false;
+                    try {
+                        const page = _c;
+                        accumulator = pageReducer(accumulator, page, index);
+                        if (shouldStop(page)) {
+                            return accumulator;
+                        }
+                        index += 1;
                     }
-                    index += 1;
+                    finally {
+                        _d = true;
+                    }
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (pageIterator_1_1 && !pageIterator_1_1.done && (_a = pageIterator_1.return)) await _a.call(pageIterator_1);
+                    if (!_d && !_a && (_b = pageIterator_1.return)) await _b.call(pageIterator_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -2526,7 +2533,7 @@ class WebClient extends methods_1.Methods {
                 if (response.status === 429) {
                     const retrySec = parseRetryHeaders(response);
                     if (retrySec !== undefined) {
-                        this.emit(WebClientEvent.RATE_LIMITED, retrySec);
+                        this.emit(WebClientEvent.RATE_LIMITED, retrySec, { url, body });
                         if (this.rejectRateLimitedCalls) {
                             throw new p_retry_1.AbortError((0, errors_1.rateLimitedErrorWithDelay)(retrySec));
                         }
@@ -2761,7 +2768,7 @@ function parseRetryHeaders(response) {
  */
 function warnDeprecations(method, logger) {
     const deprecatedConversationsMethods = ['channels.', 'groups.', 'im.', 'mpim.'];
-    const deprecatedMethods = ['admin.conversations.whitelist.'];
+    const deprecatedMethods = ['admin.conversations.whitelist.', 'stars.'];
     const isDeprecatedConversations = deprecatedConversationsMethods.some((depMethod) => {
         const re = new RegExp(`^${depMethod}`);
         return re.test(method);
@@ -2831,7 +2838,9 @@ exports.buildThreadTsWarningMessage = buildThreadTsWarningMessage;
  * @param body
  * @returns
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function redact(body) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flattened = Object.entries(body).map(([key, value]) => {
         // no value provided
         if (value === undefined || value === null) {
@@ -2852,6 +2861,7 @@ function redact(body) {
         return [key, serializedValue];
     });
     // return as object 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const initialValue = {};
     return flattened.reduce((accumulator, [key, value]) => {
         if (key !== undefined && value !== undefined) {
@@ -2950,6 +2960,7 @@ exports.rateLimitedErrorWithDelay = rateLimitedErrorWithDelay;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.buildInvalidFilesUploadParamError = exports.buildMultipleChannelsErrorMsg = exports.buildChannelsWarning = exports.buildFilesUploadMissingMessage = exports.buildGeneralFilesUploadWarning = exports.buildLegacyMethodWarning = exports.buildMissingExtensionWarning = exports.buildMissingFileNameWarning = exports.buildLegacyFileTypeWarning = exports.buildFileSizeErrorMsg = exports.buildMissingFileIdError = exports.warnIfLegacyFileType = exports.warnIfMissingOrInvalidFileNameAndDefault = exports.errorIfInvalidOrMissingFileData = exports.errorIfChannelsCsv = exports.warnIfChannels = exports.warnIfNotUsingFilesUploadV2 = exports.getAllFileUploadsToComplete = exports.getFileDataAsStream = exports.getFileDataLength = exports.getFileData = exports.getMultipleFileUploadJobs = exports.getFileUploadJob = void 0;
 const fs_1 = __nccwpck_require__(7147);
+const stream_1 = __nccwpck_require__(2781);
 const errors_1 = __nccwpck_require__(9781);
 /**
  * Returns a fileUploadJob used to represent the of the file upload job and
@@ -3053,7 +3064,7 @@ async function getFileData(options) {
                 throw (0, errors_1.errorWithCode)(new Error(`Unable to resolve file data for ${file}. Please supply a filepath string, or binary data Buffer or String directly.`), errors_1.ErrorCode.FileUploadInvalidArgumentsError);
             }
         }
-        // try to handle as ReadStream
+        // try to handle as Readable
         const data = await getFileDataAsStream(file);
         if (data)
             return data;
@@ -3080,6 +3091,8 @@ async function getFileDataAsStream(readable) {
             while ((chunk = readable.read()) !== null) {
                 chunks.push(chunk);
             }
+        });
+        readable.on('end', () => {
             if (chunks.length > 0) {
                 const content = Buffer.concat(chunks);
                 resolve(content);
@@ -3178,8 +3191,8 @@ function errorIfInvalidOrMissingFileData(options) {
         throw (0, errors_1.errorWithCode)(new Error('Either a file or content field is required for valid file upload. You cannot supply both'), errors_1.ErrorCode.FileUploadInvalidArgumentsError);
     }
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    if (file && !(typeof file === 'string' || Buffer.isBuffer(file) || file instanceof fs_1.ReadStream)) {
-        throw (0, errors_1.errorWithCode)(new Error('file must be a valid string path, buffer or ReadStream'), errors_1.ErrorCode.FileUploadInvalidArgumentsError);
+    if (file && !(typeof file === 'string' || Buffer.isBuffer(file) || file instanceof stream_1.Readable)) {
+        throw (0, errors_1.errorWithCode)(new Error('file must be a valid string path, buffer or Readable'), errors_1.ErrorCode.FileUploadInvalidArgumentsError);
     }
     if (content && typeof content !== 'string') {
         throw (0, errors_1.errorWithCode)(new Error('content must be a string'), errors_1.ErrorCode.FileUploadInvalidArgumentsError);
@@ -3529,7 +3542,11 @@ class Methods extends eventemitter3_1.EventEmitter {
             },
             conversations: {
                 archive: bindApiCall(this, 'admin.conversations.archive'),
+                bulkArchive: bindApiCall(this, 'admin.conversations.bulkArchive'),
+                bulkDelete: bindApiCall(this, 'admin.conversations.bulkDelete'),
+                bulkMove: bindApiCall(this, 'admin.conversations.bulkMove'),
                 convertToPrivate: bindApiCall(this, 'admin.conversations.convertToPrivate'),
+                convertToPublic: bindApiCall(this, 'admin.conversations.convertToPublic'),
                 create: bindApiCall(this, 'admin.conversations.create'),
                 delete: bindApiCall(this, 'admin.conversations.delete'),
                 disconnectShared: bindApiCall(this, 'admin.conversations.disconnectShared'),
@@ -3548,6 +3565,7 @@ class Methods extends eventemitter3_1.EventEmitter {
                 getCustomRetention: bindApiCall(this, 'admin.conversations.getCustomRetention'),
                 setCustomRetention: bindApiCall(this, 'admin.conversations.setCustomRetention'),
                 removeCustomRetention: bindApiCall(this, 'admin.conversations.removeCustomRetention'),
+                lookup: bindApiCall(this, 'admin.conversations.lookup'),
                 search: bindApiCall(this, 'admin.conversations.search'),
                 setConversationPrefs: bindApiCall(this, 'admin.conversations.setConversationPrefs'),
                 setTeams: bindApiCall(this, 'admin.conversations.setTeams'),
@@ -3588,6 +3606,11 @@ class Methods extends eventemitter3_1.EventEmitter {
                     setIcon: bindApiCall(this, 'admin.teams.settings.setIcon'),
                     setName: bindApiCall(this, 'admin.teams.settings.setName'),
                 },
+            },
+            roles: {
+                addAssignments: bindApiCall(this, 'admin.roles.addAssignments'),
+                listAssignments: bindApiCall(this, 'admin.roles.listAssignments'),
+                removeAssignments: bindApiCall(this, 'admin.roles.removeAssignments'),
             },
             usergroups: {
                 addChannels: bindApiCall(this, 'admin.usergroups.addChannels'),
@@ -3914,12 +3937,15 @@ exports.cursorPaginationEnabledMethods.add('admin.apps.requests.list');
 exports.cursorPaginationEnabledMethods.add('admin.apps.restricted.list');
 exports.cursorPaginationEnabledMethods.add('admin.auth.policy.getEntities');
 exports.cursorPaginationEnabledMethods.add('admin.barriers.list');
+exports.cursorPaginationEnabledMethods.add('admin.conversations.lookup');
 exports.cursorPaginationEnabledMethods.add('admin.conversations.ekm.listOriginalConnectedChannelInfo');
 exports.cursorPaginationEnabledMethods.add('admin.conversations.getTeams');
 exports.cursorPaginationEnabledMethods.add('admin.conversations.search');
 exports.cursorPaginationEnabledMethods.add('admin.emoji.list');
 exports.cursorPaginationEnabledMethods.add('admin.inviteRequests.approved.list');
 exports.cursorPaginationEnabledMethods.add('admin.inviteRequests.denied.list');
+exports.cursorPaginationEnabledMethods.add('admin.inviteRequests.list');
+exports.cursorPaginationEnabledMethods.add('admin.roles.listAssignments');
 exports.cursorPaginationEnabledMethods.add('admin.inviteRequests.list');
 exports.cursorPaginationEnabledMethods.add('admin.teams.admins.list');
 exports.cursorPaginationEnabledMethods.add('admin.teams.list');
@@ -3942,6 +3968,7 @@ exports.cursorPaginationEnabledMethods.add('im.list');
 exports.cursorPaginationEnabledMethods.add('mpim.list');
 exports.cursorPaginationEnabledMethods.add('reactions.list');
 exports.cursorPaginationEnabledMethods.add('stars.list');
+exports.cursorPaginationEnabledMethods.add('team.accessLogs');
 exports.cursorPaginationEnabledMethods.add('users.conversations');
 exports.cursorPaginationEnabledMethods.add('users.list');
 __exportStar(__nccwpck_require__(4380), exports);
@@ -10614,7 +10641,7 @@ function isElectron() {
         return true;
     }
 
-    // Detect the user agent when the `nodeIntegration` option is set to true
+    // Detect the user agent when the `nodeIntegration` option is set to false
     if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
         return true;
     }
@@ -13235,7 +13262,7 @@ module.exports = require("zlib");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"@slack/web-api","version":"6.8.0","description":"Official library for using the Slack Platform\'s Web API","author":"Slack Technologies, LLC","license":"MIT","keywords":["slack","web-api","bot","client","http","api","proxy","rate-limiting","pagination"],"main":"dist/index.js","types":"./dist/index.d.ts","files":["dist/**/*"],"engines":{"node":">= 12.13.0","npm":">= 6.12.0"},"repository":"slackapi/node-slack-sdk","homepage":"https://slack.dev/node-slack-sdk/web-api","publishConfig":{"access":"public"},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"scripts":{"prepare":"npm run build","build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","lint":"eslint --ext .ts src","test":"npm run lint && npm run build && npm run test:mocha && npm run test:types","test:mocha":"nyc mocha --config .mocharc.json src/*.spec.js","test:types":"tsd","coverage":"codecov -F webapi --root=$PWD","ref-docs:model":"api-extractor run","watch":"npx nodemon --watch \'src\' --ext \'ts\' --exec npm run build","build:deno":"esbuild --bundle --define:process.cwd=String --define:process.version=\'\\"v1.15.2\\"\' --define:process.title=\'\\"deno\\"\' --define:Buffer=dummy_buffer --inject:./deno-shims/buffer-shim.js --inject:./deno-shims/xhr-shim.js --target=esnext --format=esm --outfile=./mod.js src/index.ts"},"dependencies":{"@slack/logger":"^3.0.0","@slack/types":"^2.0.0","@types/is-stream":"^1.1.0","@types/node":">=12.0.0","axios":"^0.27.2","eventemitter3":"^3.1.0","form-data":"^2.5.0","is-electron":"2.2.0","is-stream":"^1.1.0","p-queue":"^6.6.1","p-retry":"^4.0.0"},"devDependencies":{"@aoberoi/capture-console":"^1.1.0","@microsoft/api-extractor":"^7.3.4","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","@typescript-eslint/eslint-plugin":"^4.4.1","@typescript-eslint/parser":"^4.4.0","busboy":"^1.6.0","chai":"^4.2.0","codecov":"^3.2.0","esbuild":"^0.13.15","eslint":"^7.32.0","eslint-config-airbnb-base":"^14.2.1","eslint-config-airbnb-typescript":"^12.3.1","eslint-plugin-import":"^2.22.1","eslint-plugin-jsdoc":"^30.6.1","eslint-plugin-node":"^11.1.0","mocha":"^9.1.0","nock":"^13.2.6","nyc":"^15.1.0","shelljs":"^0.8.3","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^10.8.1","tsd":"0.23.0","typescript":"^4.1"},"tsd":{"directory":"test/types"}}');
+module.exports = JSON.parse('{"name":"@slack/web-api","version":"6.9.0","description":"Official library for using the Slack Platform\'s Web API","author":"Slack Technologies, LLC","license":"MIT","keywords":["slack","web-api","bot","client","http","api","proxy","rate-limiting","pagination"],"main":"dist/index.js","types":"./dist/index.d.ts","files":["dist/**/*"],"engines":{"node":">= 12.13.0","npm":">= 6.12.0"},"repository":"slackapi/node-slack-sdk","homepage":"https://slack.dev/node-slack-sdk/web-api","publishConfig":{"access":"public"},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"scripts":{"prepare":"npm run build","build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","lint":"eslint --ext .ts src","test":"npm run lint && npm run build && npm run test:mocha && npm run test:types","test:mocha":"nyc mocha --config .mocharc.json src/*.spec.js","test:types":"tsd","coverage":"codecov -F webapi --root=$PWD","ref-docs:model":"api-extractor run","watch":"npx nodemon --watch \'src\' --ext \'ts\' --exec npm run build","build:deno":"esbuild --bundle --define:process.cwd=String --define:process.version=\'\\"v1.15.2\\"\' --define:process.title=\'\\"deno\\"\' --define:Buffer=dummy_buffer --inject:./deno-shims/buffer-shim.js --inject:./deno-shims/xhr-shim.js --target=esnext --format=esm --outfile=./mod.js src/index.ts"},"dependencies":{"@slack/logger":"^3.0.0","@slack/types":"^2.8.0","@types/is-stream":"^1.1.0","@types/node":">=12.0.0","axios":"^0.27.2","eventemitter3":"^3.1.0","form-data":"^2.5.0","is-electron":"2.2.2","is-stream":"^1.1.0","p-queue":"^6.6.1","p-retry":"^4.0.0"},"devDependencies":{"@aoberoi/capture-console":"^1.1.0","@microsoft/api-extractor":"^7.3.4","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","@typescript-eslint/eslint-plugin":"^4.4.1","@typescript-eslint/parser":"^4.4.0","busboy":"^1.6.0","chai":"^4.2.0","codecov":"^3.2.0","esbuild":"^0.13.15","eslint":"^7.32.0","eslint-config-airbnb-base":"^14.2.1","eslint-config-airbnb-typescript":"^12.3.1","eslint-plugin-import":"^2.22.1","eslint-plugin-jsdoc":"^30.6.1","eslint-plugin-node":"^11.1.0","mocha":"^9.1.0","nock":"^13.2.6","nyc":"^15.1.0","shelljs":"^0.8.3","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^10.8.1","tsd":"0.23.0","typescript":"^4.1"},"tsd":{"directory":"test/types"}}');
 
 /***/ }),
 
